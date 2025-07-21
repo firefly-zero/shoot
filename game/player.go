@@ -23,11 +23,8 @@ func loadPlayers() *Set[Player] {
 	players := newSet[Player]()
 	for i, peer := range peers {
 		players.add(&Player{
-			peer: peer,
-			pos: firefly.Point{
-				X: 60 + 30*i,
-				Y: 60 + 30*i,
-			},
+			peer:   peer,
+			pos:    placePlayer(i),
 			health: 3,
 		})
 	}
@@ -95,6 +92,24 @@ func (p *Player) render() {
 	firefly.DrawCircle(p.pos, playerD, s)
 }
 
+// Pick a random starting position for a player.
+func placePlayer(quadrant int) firefly.Point {
+	for {
+		x := int(firefly.GetRandom() % (firefly.Width - playerD) / 2)
+		y := int(firefly.GetRandom() % (firefly.Height - playerD) / 2)
+		if quadrant == 1 || quadrant == 2 {
+			x += firefly.Width / 2
+		}
+		if quadrant == 1 || quadrant == 3 {
+			y += firefly.Height / 2
+		}
+		p := firefly.Point{X: x, Y: y}
+		if !isCollidingBricksPlayer(p) {
+			return p
+		}
+	}
+}
+
 // Make sure that the new player position doesn't place the player inside a brick.
 func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
 	bricks := level.bricks.iter()
@@ -108,6 +123,7 @@ func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
 	return newPos
 }
 
+// Check if the player movement collides with a brick and adjust the new coordinates.
 func collideBrickPlayer(oldPos, newPos firefly.Point, brick *Brick) firefly.Point {
 	if isCollidingBrickPlayer(newPos, brick) {
 		return oldPos
@@ -116,6 +132,22 @@ func collideBrickPlayer(oldPos, newPos firefly.Point, brick *Brick) firefly.Poin
 	}
 }
 
+// Check if the player at the given position collides with any brick.
+func isCollidingBricksPlayer(pos firefly.Point) bool {
+	bricks := level.bricks.iter()
+	for {
+		brick := bricks.next()
+		if brick == nil {
+			break
+		}
+		if isCollidingBrickPlayer(pos, brick) {
+			return true
+		}
+	}
+	return false
+}
+
+// Check if the given brick collides with the player at the given position
 func isCollidingBrickPlayer(pos firefly.Point, brick *Brick) bool {
 	if pos.X+playerD < brick.pos.X {
 		return false
