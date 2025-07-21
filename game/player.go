@@ -108,8 +108,8 @@ func (p *Player) render() {
 // Pick a random starting position for a player.
 func placePlayer(quadrant int) firefly.Point {
 	for {
-		x := int(firefly.GetRandom() % (firefly.Width - playerD) / 2)
-		y := int(firefly.GetRandom() % (firefly.Height - playerD) / 2)
+		x := int(firefly.GetRandom() % (firefly.Width/2 - playerD))
+		y := int(firefly.GetRandom() % (firefly.Height/2 - playerD))
 		if quadrant == 1 || quadrant == 2 {
 			x += firefly.Width / 2
 		}
