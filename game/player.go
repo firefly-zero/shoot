@@ -7,9 +7,11 @@ import (
 const playerD = 16
 
 type Player struct {
-	peer firefly.Peer
-	pad  *firefly.Pad
-	pos  firefly.Point
+	peer   firefly.Peer
+	pad    *firefly.Pad
+	btns   firefly.Buttons
+	pos    firefly.Point
+	health int
 }
 
 func loadPlayers() []*Player {
@@ -19,16 +21,33 @@ func loadPlayers() []*Player {
 		players[i] = &Player{
 			peer: peer,
 			pos: firefly.Point{
-				X: 60 + 10*i,
-				Y: 60 + 10*i,
+				X: 60 + 30*i,
+				Y: 60 + 30*i,
 			},
+			health: 3,
 		}
 	}
 	return players
 }
 
 func (p *Player) update() {
+	btns := firefly.ReadButtons(p.peer)
 	pad, touched := firefly.ReadPad(p.peer)
+
+	justPressed := btns.JustPressed(p.btns)
+	if justPressed.S {
+		origin := p.pos.Add(firefly.Point{X: playerD/2 - 2, Y: playerD/2 - 2})
+		projectile := &Projectile{
+			origin: origin,
+			pos:    origin,
+			dx:     2.,
+			dy:     0,
+			d:      4,
+		}
+		projectiles.items = projectiles.items.prepend(projectile)
+	}
+	p.btns = btns
+
 	if touched {
 		if p.pad != nil {
 			dx := (pad.X - p.pad.X) / 20
@@ -58,10 +77,10 @@ func (p *Player) render() {
 
 // Make sure that the new player position doesn't place the player inside a brick.
 func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
-	bricks := &level.bricks
+	bricks := level.bricks
 	for bricks != nil {
-		brick := bricks.head
-		bricks = bricks.tail
+		brick := bricks.item
+		bricks = bricks.next
 		newPos = collideBrickPlayer(oldPos, newPos, brick)
 	}
 	return newPos
