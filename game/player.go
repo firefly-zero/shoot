@@ -1,6 +1,8 @@
 package game
 
 import (
+	"math"
+
 	"github.com/firefly-zero/firefly-go/firefly"
 )
 
@@ -8,6 +10,7 @@ const (
 	playerD     = 16
 	bulletD     = 4
 	bulletSpeed = 2.
+	maxHealth   = 4
 )
 
 type Player struct {
@@ -15,6 +18,7 @@ type Player struct {
 	pad    *firefly.Pad
 	btns   firefly.Buttons
 	pos    firefly.Point
+	color  firefly.Color
 	health int
 }
 
@@ -25,7 +29,8 @@ func loadPlayers() *Set[Player] {
 		players.add(&Player{
 			peer:   peer,
 			pos:    placePlayer(i),
-			health: 3,
+			health: 4,
+			color:  pickPlayerColor(i),
 		})
 	}
 	return players
@@ -85,8 +90,16 @@ func (p *Player) update() {
 }
 
 func (p *Player) render() {
+	{
+		angle := firefly.Radians(2 * math.Pi * float32(p.health) / maxHealth)
+		s := firefly.Style{
+			FillColor: p.color,
+		}
+		firefly.DrawSector(p.pos, playerD, firefly.Radians(0), angle, s)
+	}
+
 	s := firefly.Style{
-		StrokeColor: firefly.ColorBlue,
+		StrokeColor: p.color,
 		StrokeWidth: 1,
 	}
 	firefly.DrawCircle(p.pos, playerD, s)
@@ -162,4 +175,17 @@ func isCollidingBrickPlayer(pos firefly.Point, brick *Brick) bool {
 		return false
 	}
 	return true
+}
+
+func pickPlayerColor(i int) firefly.Color {
+	switch i {
+	case 0:
+		return firefly.ColorDarkBlue
+	case 1:
+		return firefly.ColorCyan
+	case 2:
+		return firefly.ColorBlue
+	default:
+		return firefly.ColorLightBlue
+	}
 }
