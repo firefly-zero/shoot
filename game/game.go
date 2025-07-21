@@ -3,7 +3,7 @@ package game
 import "github.com/firefly-zero/firefly-go/firefly"
 
 var (
-	players []Player
+	players []*Player
 	level   Level
 )
 
