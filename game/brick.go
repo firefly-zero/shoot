@@ -4,9 +4,7 @@ import (
 	"github.com/firefly-zero/firefly-go/firefly"
 )
 
-var (
-	brickSize = firefly.Size{W: 16, H: 16}
-)
+var brickSize = firefly.Size{W: 16, H: 16}
 
 type Brick struct {
 	pos    firefly.Point
@@ -20,35 +18,22 @@ func newBrick(x, y int) *Brick {
 	}
 }
 
-func (b Brick) left() int {
-	return b.pos.X
-}
-
-func (b Brick) right() int {
-	return b.pos.X + brickSize.W
-}
-
-func (b Brick) top() int {
-	return b.pos.Y
-}
-
-func (b Brick) bottom() int {
-	return b.pos.Y + brickSize.H
-}
+func (b Brick) left() int   { return b.pos.X }
+func (b Brick) right() int  { return b.pos.X + brickSize.W }
+func (b Brick) top() int    { return b.pos.Y }
+func (b Brick) bottom() int { return b.pos.Y + brickSize.H }
 
 func (b Brick) render() {
-	{
-		style := firefly.Style{FillColor: firefly.ColorOrange}
-		firefly.DrawRect(b.pos, brickSize, style)
-	}
-	{
-		style := firefly.Style{StrokeColor: firefly.ColorWhite, StrokeWidth: 1}
-		firefly.DrawRect(
-			b.pos.Add(firefly.Point{X: 2, Y: 2}),
-			brickSize.Sub(firefly.Size{W: 4, H: 4}),
-			style,
-		)
-	}
+	firefly.DrawRect(
+		b.pos,
+		brickSize,
+		firefly.Style{FillColor: firefly.ColorOrange},
+	)
+	firefly.DrawRect(
+		b.pos.Add(firefly.Point{X: 2, Y: 2}),
+		brickSize.Sub(firefly.Size{W: 4, H: 4}),
+		firefly.Style{StrokeColor: firefly.ColorWhite, StrokeWidth: 1},
+	)
 	b.renderCracks()
 }
 

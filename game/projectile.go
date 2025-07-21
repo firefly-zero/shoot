@@ -12,12 +12,46 @@ type Projectile struct {
 	dmg    int
 }
 
-func (p *Projectile) update() {
+func (p *Projectile) update() bool {
 	p.age += 1.
 	p.pos = firefly.Point{
 		X: p.origin.X + int(p.age*p.dx),
 		Y: p.origin.Y + int(p.age*p.dy),
 	}
+
+	if !p.inBounds() {
+		return false
+	}
+	bricks := level.bricks.iter()
+	for {
+		brick := bricks.next()
+		if brick == nil {
+			break
+		}
+		if p.isCollidingBrick(brick) {
+			brick.health -= p.dmg
+			if brick.health <= 0 {
+				bricks.remove()
+			}
+			return false
+		}
+	}
+
+	players := players.iter()
+	for {
+		player := players.next()
+		if player == nil {
+			break
+		}
+		if p.isCollidingPlayer(player) {
+			player.health -= p.dmg
+			if player.health <= 0 {
+				players.remove()
+			}
+			return false
+		}
+	}
+	return true
 }
 
 func (p Projectile) inBounds() bool {
@@ -42,16 +76,16 @@ func (p Projectile) render() {
 }
 
 func (p Projectile) isCollidingBrick(brick *Brick) bool {
-	if p.pos.X+p.d <= brick.pos.X {
+	if p.pos.X+p.d <= brick.left() {
 		return false
 	}
-	if p.pos.X >= brick.pos.X+brickSize.W {
+	if p.pos.X >= brick.right() {
 		return false
 	}
-	if p.pos.Y+p.d <= brick.pos.Y {
+	if p.pos.Y+p.d <= brick.top() {
 		return false
 	}
-	if p.pos.Y >= brick.pos.Y+brickSize.H {
+	if p.pos.Y >= brick.bottom() {
 		return false
 	}
 	return true
