@@ -25,6 +25,14 @@ func (ps *Projectiles) update() {
 					} else {
 						ps.items = items.next
 					}
+					brick.health -= p.dmg
+					if brick.health <= 0 {
+						if bricks.prev != nil {
+							bricks.prev.next = bricks.next
+						} else {
+							level.bricks = bricks.next
+						}
+					}
 					break
 				}
 				bricks = bricks.next

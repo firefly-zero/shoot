@@ -14,8 +14,8 @@ type Brick struct {
 	health int
 }
 
-func newBrick(x, y int) Brick {
-	return Brick{
+func newBrick(x, y int) *Brick {
+	return &Brick{
 		pos:    firefly.Point{X: x, Y: y},
 		health: 3,
 	}

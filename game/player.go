@@ -44,7 +44,10 @@ func (p *Player) update() {
 			X: p.pos.X + playerD/2 - bulletD/2,
 			Y: p.pos.Y + playerD/2 - bulletD/2,
 		}
-		bullet := &Projectile{d: bulletD}
+		bullet := &Projectile{
+			d:   bulletD,
+			dmg: 1,
+		}
 		if justPressed.S {
 			bullet.dy = bulletSpeed
 			origin.Y += playerD/2 + bulletD/2
@@ -103,7 +106,7 @@ func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
 	return newPos
 }
 
-func collideBrickPlayer(oldPos, newPos firefly.Point, brick Brick) firefly.Point {
+func collideBrickPlayer(oldPos, newPos firefly.Point, brick *Brick) firefly.Point {
 	if isCollidingBrickPlayer(newPos, brick) {
 		return oldPos
 	} else {
@@ -111,7 +114,7 @@ func collideBrickPlayer(oldPos, newPos firefly.Point, brick Brick) firefly.Point
 	}
 }
 
-func isCollidingBrickPlayer(pos firefly.Point, brick Brick) bool {
+func isCollidingBrickPlayer(pos firefly.Point, brick *Brick) bool {
 	if pos.X+playerD < brick.pos.X {
 		return false
 	}

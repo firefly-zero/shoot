@@ -9,6 +9,7 @@ type Projectile struct {
 	dx     float32
 	dy     float32
 	d      int
+	dmg    int
 }
 
 func (p *Projectile) update() {
@@ -40,7 +41,7 @@ func (p Projectile) render() {
 	firefly.DrawCircle(p.pos, p.d, s)
 }
 
-func (p Projectile) isCollidingBrick(brick Brick) bool {
+func (p Projectile) isCollidingBrick(brick *Brick) bool {
 	if p.pos.X+p.d <= brick.pos.X {
 		return false
 	}

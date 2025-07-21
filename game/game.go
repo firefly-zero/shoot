@@ -5,7 +5,7 @@ import "github.com/firefly-zero/firefly-go/firefly"
 var (
 	projectiles *Projectiles
 	players     []*Player
-	level       Level
+	level       *Level
 )
 
 func Boot() {
