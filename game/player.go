@@ -18,18 +18,18 @@ type Player struct {
 	health int
 }
 
-func loadPlayers() []*Player {
+func loadPlayers() *Set[Player] {
 	peers := firefly.GetPeers().Slice()
-	players := make([]*Player, len(peers))
+	players := newSet[Player]()
 	for i, peer := range peers {
-		players[i] = &Player{
+		players.add(&Player{
 			peer: peer,
 			pos: firefly.Point{
 				X: 60 + 30*i,
 				Y: 60 + 30*i,
 			},
 			health: 3,
-		}
+		})
 	}
 	return players
 }

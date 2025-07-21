@@ -4,7 +4,7 @@ import "github.com/firefly-zero/firefly-go/firefly"
 
 var (
 	projectiles *Projectiles
-	players     []*Player
+	players     *Set[Player]
 	level       *Level
 )
 
@@ -16,7 +16,12 @@ func Boot() {
 
 func Update() {
 	projectiles.update()
-	for _, p := range players {
+	iter := players.iter()
+	for {
+		p := iter.next()
+		if p == nil {
+			break
+		}
 		p.update()
 	}
 }
@@ -25,7 +30,12 @@ func Render() {
 	firefly.ClearScreen(firefly.ColorWhite)
 	level.render()
 	projectiles.render()
-	for _, p := range players {
+	iter := players.iter()
+	for {
+		p := iter.next()
+		if p == nil {
+			break
+		}
 		p.render()
 	}
 }
