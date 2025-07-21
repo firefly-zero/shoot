@@ -39,7 +39,8 @@ func (p *Player) update() {
 			newX := clamp(p.pos.X+dx, 0, firefly.Width-playerD)
 			newY := clamp(p.pos.Y-dy, 0, firefly.Height-playerD)
 
-			p.pos = firefly.Point{X: newX, Y: newY}
+			newPos := firefly.Point{X: newX, Y: newY}
+			p.pos = collideBricksPlayer(p.pos, newPos)
 		}
 		p.pad = &pad
 	} else {
@@ -53,4 +54,39 @@ func (p *Player) render() {
 		StrokeWidth: 1,
 	}
 	firefly.DrawCircle(p.pos, playerD, s)
+}
+
+// Make sure that the new player position doesn't place the player inside a brick.
+func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
+	bricks := &level.bricks
+	for bricks != nil {
+		brick := bricks.head
+		bricks = bricks.tail
+		newPos = collideBrickPlayer(oldPos, newPos, brick)
+	}
+	return newPos
+}
+
+func collideBrickPlayer(oldPos, newPos firefly.Point, brick Brick) firefly.Point {
+	if isCollidingBrickPlayer(newPos, brick) {
+		return oldPos
+	} else {
+		return newPos
+	}
+}
+
+func isCollidingBrickPlayer(pos firefly.Point, brick Brick) bool {
+	if pos.X+playerD < brick.pos.X {
+		return false
+	}
+	if pos.X > brick.pos.X+brickSize.W {
+		return false
+	}
+	if pos.Y+playerD < brick.pos.Y {
+		return false
+	}
+	if pos.Y > brick.pos.Y+brickSize.H {
+		return false
+	}
+	return true
 }
