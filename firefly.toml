@@ -2,3 +2,6 @@ author_id = "lux"
 app_id = "shoot"
 author_name = "Lux"
 app_name = "Shoot!"
+
+[files]
+lvl1 = { path = "levels/1.txt", copy = true }

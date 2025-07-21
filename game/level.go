@@ -1,13 +1,28 @@
 package game
 
+import "github.com/firefly-zero/firefly-go/firefly"
+
 type Level struct {
 	bricks *List[*Brick]
 }
 
 func loadLevel() *Level {
-	bricks := &List[*Brick]{item: newBrick(20, 20)}
-	bricks = bricks.prepend(newBrick(40, 40))
-	bricks = bricks.prepend(newBrick(200, 20))
+	var bricks *List[*Brick]
+	file := firefly.LoadFile("lvl1", nil)
+	x := 0
+	y := 0
+	for _, c := range file.Raw {
+		switch c {
+		case '\n':
+			x = 0
+			y += brickSize.H
+		case '.', ' ':
+			x += brickSize.W
+		case '#':
+			bricks = bricks.prepend(newBrick(x, y))
+			x += brickSize.W
+		}
+	}
 	return &Level{bricks: bricks}
 }
 
