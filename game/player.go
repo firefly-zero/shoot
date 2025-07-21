@@ -8,6 +8,7 @@ import (
 
 const (
 	playerD     = 16
+	playerR     = playerD / 2
 	bulletD     = 4
 	bulletSpeed = 2.
 	maxHealth   = 4
@@ -43,8 +44,8 @@ func (p *Player) update() {
 	justPressed := btns.JustPressed(p.btns)
 	if justPressed.AnyPressed() {
 		origin := firefly.Point{
-			X: p.pos.X + playerD/2 - bulletD/2,
-			Y: p.pos.Y + playerD/2 - bulletD/2,
+			X: p.pos.X + playerR - bulletD/2,
+			Y: p.pos.Y + playerR - bulletD/2,
 		}
 		bullet := &Projectile{
 			d:   bulletD,
@@ -52,17 +53,17 @@ func (p *Player) update() {
 		}
 		if justPressed.S {
 			bullet.dy = bulletSpeed
-			origin.Y += playerD/2 + bulletD/2
+			origin.Y += playerR + bulletD/2
 		} else if justPressed.N {
 			bullet.dy = -bulletSpeed
-			origin.Y -= playerD/2 + bulletD/2
+			origin.Y -= playerR + bulletD/2
 		}
 		if justPressed.W {
 			bullet.dx = -bulletSpeed
-			origin.X -= playerD/2 + bulletD/2
+			origin.X -= playerR + bulletD/2
 		} else if justPressed.E {
 			bullet.dx = bulletSpeed
-			origin.X += playerD/2 + bulletD/2
+			origin.X += playerR + bulletD/2
 		}
 		bullet.origin = origin
 		bullet.pos = origin
@@ -151,28 +152,28 @@ func collideBrickPlayer(oldPos, newPos firefly.Point, brick *Brick) firefly.Poin
 	// every brick surface explicitly but I'm not smart enough for this.
 
 	// left surface
-	right := firefly.Point{X: oldPos.X + playerD, Y: oldPos.Y + playerD/2}
+	right := firefly.Point{X: oldPos.X + playerD, Y: oldPos.Y + playerR}
 	if right.X < brick.right() && right.Y >= brick.top() && right.Y <= brick.bottom() {
 		newPos.X = brick.left() - playerD
 		return newPos
 	}
 
 	// right surface
-	left := firefly.Point{X: oldPos.X, Y: oldPos.Y + playerD/2}
+	left := firefly.Point{X: oldPos.X, Y: oldPos.Y + playerR}
 	if left.X > brick.left() && left.Y >= brick.top() && left.Y <= brick.bottom() {
 		newPos.X = brick.right()
 		return newPos
 	}
 
 	// top surface
-	bottom := firefly.Point{X: oldPos.X + playerD/2, Y: oldPos.Y + playerD}
+	bottom := firefly.Point{X: oldPos.X + playerR, Y: oldPos.Y + playerD}
 	if bottom.Y > brick.bottom() && bottom.X <= brick.left() && bottom.X >= brick.right() {
 		newPos.Y = brick.top() - playerD
 		return newPos
 	}
 
 	// bottom surface
-	top := firefly.Point{X: oldPos.X + playerD/2, Y: oldPos.Y + playerD}
+	top := firefly.Point{X: oldPos.X + playerR, Y: oldPos.Y + playerD}
 	if top.Y > brick.top() && top.X <= brick.left() && top.X >= brick.right() {
 		newPos.Y = brick.bottom()
 		return newPos
