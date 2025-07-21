@@ -4,7 +4,11 @@ import (
 	"github.com/firefly-zero/firefly-go/firefly"
 )
 
-const playerD = 16
+const (
+	playerD     = 16
+	bulletD     = 4
+	bulletSpeed = 2.
+)
 
 type Player struct {
 	peer   firefly.Peer
@@ -35,16 +39,29 @@ func (p *Player) update() {
 	pad, touched := firefly.ReadPad(p.peer)
 
 	justPressed := btns.JustPressed(p.btns)
-	if justPressed.S {
-		origin := p.pos.Add(firefly.Point{X: playerD/2 - 2, Y: playerD/2 - 2})
-		projectile := &Projectile{
-			origin: origin,
-			pos:    origin,
-			dx:     2.,
-			dy:     0,
-			d:      4,
+	if justPressed.AnyPressed() {
+		origin := firefly.Point{
+			X: p.pos.X + playerD/2 - bulletD/2,
+			Y: p.pos.Y + playerD/2 - bulletD/2,
 		}
-		projectiles.items = projectiles.items.prepend(projectile)
+		bullet := &Projectile{d: bulletD}
+		if justPressed.S {
+			bullet.dy = bulletSpeed
+			origin.Y += playerD/2 + bulletD/2
+		} else if justPressed.N {
+			bullet.dy = -bulletSpeed
+			origin.Y -= playerD/2 + bulletD/2
+		}
+		if justPressed.W {
+			bullet.dx = -bulletSpeed
+			origin.X -= playerD/2 + bulletD/2
+		} else if justPressed.E {
+			bullet.dx = bulletSpeed
+			origin.X += playerD/2 + bulletD/2
+		}
+		bullet.origin = origin
+		bullet.pos = origin
+		projectiles.items = projectiles.items.prepend(bullet)
 	}
 	p.btns = btns
 
