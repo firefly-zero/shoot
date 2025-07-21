@@ -29,7 +29,7 @@ func loadPlayers() *Set[Player] {
 		players.add(&Player{
 			peer:   peer,
 			pos:    placePlayer(i),
-			health: 4,
+			health: maxHealth,
 			color:  pickPlayerColor(i),
 		})
 	}

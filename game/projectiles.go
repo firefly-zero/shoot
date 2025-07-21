@@ -30,6 +30,22 @@ func (ps *Projectiles) update() {
 					break
 				}
 			}
+
+			players := players.iter()
+			for {
+				player := players.next()
+				if player == nil {
+					break
+				}
+				if p.isCollidingPlayer(player) {
+					items.remove()
+					player.health -= p.dmg
+					if player.health <= 0 {
+						players.remove()
+					}
+					break
+				}
+			}
 		}
 	}
 }

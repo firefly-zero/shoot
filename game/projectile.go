@@ -56,3 +56,19 @@ func (p Projectile) isCollidingBrick(brick *Brick) bool {
 	}
 	return true
 }
+
+func (p Projectile) isCollidingPlayer(player *Player) bool {
+	if p.pos.X+p.d <= player.pos.X {
+		return false
+	}
+	if p.pos.X >= player.pos.X+playerD {
+		return false
+	}
+	if p.pos.Y+p.d <= player.pos.Y {
+		return false
+	}
+	if p.pos.Y >= player.pos.Y+playerD {
+		return false
+	}
+	return true
+}
