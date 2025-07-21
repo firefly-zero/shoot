@@ -21,6 +21,22 @@ func newBrick(x, y int) *Brick {
 	}
 }
 
+func (b Brick) left() int {
+	return b.pos.X
+}
+
+func (b Brick) right() int {
+	return b.pos.X + brickSize.W
+}
+
+func (b Brick) top() int {
+	return b.pos.Y
+}
+
+func (b Brick) bottom() int {
+	return b.pos.Y + brickSize.H
+}
+
 func (b Brick) render() {
 	firefly.DrawRect(b.pos, brickSize, brickStyle)
 }
