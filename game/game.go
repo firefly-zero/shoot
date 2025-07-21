@@ -9,7 +9,7 @@ var (
 )
 
 func Boot() {
-	projectiles = &Projectiles{}
+	projectiles = &Projectiles{items: newSet[Projectile]()}
 	level = loadLevel()
 	players = loadPlayers()
 }

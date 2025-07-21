@@ -64,7 +64,7 @@ func (p *Player) update() {
 		}
 		bullet.origin = origin
 		bullet.pos = origin
-		projectiles.items = projectiles.items.prepend(bullet)
+		projectiles.items.add(bullet)
 	}
 	p.btns = btns
 
@@ -97,10 +97,12 @@ func (p *Player) render() {
 
 // Make sure that the new player position doesn't place the player inside a brick.
 func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
-	bricks := level.bricks
-	for bricks != nil {
-		brick := bricks.item
-		bricks = bricks.next
+	bricks := level.bricks.iter()
+	for {
+		brick := bricks.next()
+		if brick == nil {
+			break
+		}
 		newPos = collideBrickPlayer(oldPos, newPos, brick)
 	}
 	return newPos

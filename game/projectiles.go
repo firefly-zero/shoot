@@ -1,51 +1,46 @@
 package game
 
 type Projectiles struct {
-	items *List[*Projectile]
+	items *Set[Projectile]
 }
 
 func (ps *Projectiles) update() {
-	items := ps.items
-	for items != nil {
-		p := items.item
+	items := ps.items.iter()
+	for {
+		p := items.next()
+		if p == nil {
+			break
+		}
 		p.update()
 		if !p.inBounds() {
-			if items.prev != nil {
-				items.prev.next = items.next
-			} else {
-				ps.items = items.next
-			}
+			items.remove()
 		} else {
-			bricks := level.bricks
-			for bricks != nil {
-				brick := bricks.item
+			bricks := level.bricks.iter()
+			for {
+				brick := bricks.next()
+				if brick == nil {
+					break
+				}
 				if p.isCollidingBrick(brick) {
-					if items.prev != nil {
-						items.prev.next = items.next
-					} else {
-						ps.items = items.next
-					}
+					items.remove()
 					brick.health -= p.dmg
 					if brick.health <= 0 {
-						if bricks.prev != nil {
-							bricks.prev.next = bricks.next
-						} else {
-							level.bricks = bricks.next
-						}
+						bricks.remove()
 					}
 					break
 				}
-				bricks = bricks.next
 			}
 		}
-		items = items.next
 	}
 }
 
 func (ps Projectiles) render() {
-	items := ps.items
-	for items != nil {
-		items.item.render()
-		items = items.next
+	items := ps.items.iter()
+	for {
+		p := items.next()
+		if p == nil {
+			break
+		}
+		p.render()
 	}
 }
