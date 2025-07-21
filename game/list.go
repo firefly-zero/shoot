@@ -13,9 +13,3 @@ func (l *List[T]) prepend(v T) *List[T] {
 	}
 	return res
 }
-
-func (l List[T]) remove() {
-	if l.prev != nil {
-		l.prev.next = l.next
-	}
-}

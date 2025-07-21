@@ -10,7 +10,25 @@ func (ps *Projectiles) update() {
 		p := items.item
 		p.update()
 		if !p.inBounds() {
-			items.remove()
+			if items.prev != nil {
+				items.prev.next = items.next
+			} else {
+				ps.items = items.next
+			}
+		} else {
+			bricks := level.bricks
+			for bricks != nil {
+				brick := bricks.item
+				if p.isCollidingBrick(brick) {
+					if items.prev != nil {
+						items.prev.next = items.next
+					} else {
+						ps.items = items.next
+					}
+					break
+				}
+				bricks = bricks.next
+			}
 		}
 		items = items.next
 	}

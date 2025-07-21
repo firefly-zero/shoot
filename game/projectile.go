@@ -39,3 +39,19 @@ func (p Projectile) render() {
 	s := firefly.Style{FillColor: firefly.ColorRed}
 	firefly.DrawCircle(p.pos, p.d, s)
 }
+
+func (p Projectile) isCollidingBrick(brick Brick) bool {
+	if p.pos.X+p.d <= brick.pos.X {
+		return false
+	}
+	if p.pos.X >= brick.pos.X+brickSize.W {
+		return false
+	}
+	if p.pos.Y+p.d <= brick.pos.Y {
+		return false
+	}
+	if p.pos.Y >= brick.pos.Y+brickSize.H {
+		return false
+	}
+	return true
+}
