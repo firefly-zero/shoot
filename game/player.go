@@ -91,6 +91,7 @@ func (p *Player) update() {
 				}
 				if b.collides(letter.bbox()) {
 					letter.active = true
+					maybeStartGame()
 				}
 			}
 			p.pos = b.Point

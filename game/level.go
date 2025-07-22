@@ -2,6 +2,25 @@ package game
 
 import "github.com/firefly-zero/firefly-go/firefly"
 
+// When in hub, close the hub and start the real game if all letters are active.
+func maybeStartGame() {
+	if !hub {
+		return
+	}
+	letters := level.letters.iter()
+	for {
+		letter := letters.next()
+		if letter == nil {
+			break
+		}
+		if !letter.active {
+			return
+		}
+	}
+	hub = false
+	resetGame()
+}
+
 type Level struct {
 	bricks  *Set[Brick]
 	letters *Set[Letter]
