@@ -17,8 +17,28 @@ func (e *Enemy) update() bool {
 	if dx == 0 && dy == 0 {
 		return false
 	}
-	dp := firefly.Point{X: dx, Y: dy}
-	e.pos = e.pos.Add(dp)
+
+	// Collide the new coordinates with bricks.
+	bbox := BBox{
+		Point: firefly.Point{
+			X: e.pos.X + dx,
+			Y: e.pos.Y + dy,
+		},
+		Size: firefly.Size{
+			W: e.d,
+			H: e.d,
+		},
+	}
+	bricks := level.bricks.iter()
+	for {
+		brick := bricks.next()
+		if brick == nil {
+			break
+		}
+		bbox.Point = bbox.Collide(e.pos, brick.bbox())
+	}
+
+	e.pos = bbox.Point
 	return true
 }
 
