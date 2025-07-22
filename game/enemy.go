@@ -3,9 +3,17 @@ package game
 import "github.com/firefly-zero/firefly-go/firefly"
 
 type Enemy struct {
+	id     int
 	pos    firefly.Point
 	d      int
 	health int
+}
+
+func (e Enemy) bbox() BBox {
+	return BBox{
+		Point: e.pos,
+		Size:  firefly.Size{W: e.d, H: e.d},
+	}
 }
 
 func (e *Enemy) update() bool {
@@ -20,16 +28,22 @@ func (e *Enemy) update() bool {
 
 	// Collide the new coordinates with bricks.
 	bbox := BBox{
-		Point: firefly.Point{
-			X: e.pos.X + dx,
-			Y: e.pos.Y + dy,
-		},
-		Size: firefly.Size{
-			W: e.d,
-			H: e.d,
-		},
+		Point: firefly.Point{X: e.pos.X + dx, Y: e.pos.Y + dy},
+		Size:  firefly.Size{W: e.d, H: e.d},
 	}
-	e.pos = level.collide(e.pos, bbox)
+	bbox.Point = level.collide(e.pos, bbox)
+	enemies := enemies.items.iter()
+	for {
+		enemy := enemies.next()
+		if enemy == nil {
+			break
+		}
+		if enemy.id == e.id {
+			continue
+		}
+		bbox.Point = bbox.collide(e.pos, enemy.bbox())
+	}
+	e.pos = bbox.Point
 	return true
 }
 

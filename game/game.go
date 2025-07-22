@@ -11,7 +11,11 @@ var (
 
 func Boot() {
 	projectiles = &Projectiles{items: newSet[Projectile]()}
-	enemies = &Enemies{items: newSet[Enemy]()}
+	enemies = &Enemies{
+		items:    newSet[Enemy](),
+		nextID:   1,
+		nextWave: 120,
+	}
 	level = loadLevel()
 	players = loadPlayers()
 }
