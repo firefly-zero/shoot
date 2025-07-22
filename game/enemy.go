@@ -35,7 +35,7 @@ func (e *Enemy) update() bool {
 		if brick == nil {
 			break
 		}
-		bbox.Point = bbox.Collide(e.pos, brick.bbox())
+		bbox.Point = bbox.collide(e.pos, brick.bbox())
 	}
 
 	e.pos = bbox.Point

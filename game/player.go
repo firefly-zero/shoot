@@ -126,48 +126,28 @@ func placePlayer(quadrant int) firefly.Point {
 
 // Make sure that the new player position doesn't place the player inside a brick.
 func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
-	bricks := level.bricks.iter()
-	for {
-		brick := bricks.next()
-		if brick == nil {
-			break
-		}
-		newPos = collideBrickPlayer(oldPos, newPos, brick)
-	}
-	return newPos
-}
-
-// Check if the player movement collides with a brick and adjust the new coordinates.
-func collideBrickPlayer(oldPos, newPos firefly.Point, brick *Brick) firefly.Point {
 	b := BBox{
 		Point: newPos,
 		Size:  firefly.Size{W: playerD, H: playerD},
 	}
-	return b.Collide(oldPos, brick.bbox())
-}
-
-// Check if the player at the given position collides with any brick.
-func isCollidingBricksPlayer(pos firefly.Point) bool {
 	bricks := level.bricks.iter()
 	for {
 		brick := bricks.next()
 		if brick == nil {
 			break
 		}
-		if isCollidingBrickPlayer(pos, brick) {
-			return true
-		}
+		b.Point = b.collide(oldPos, brick.bbox())
 	}
-	return false
+	return b.Point
 }
 
-// Check if the given brick collides with the player at the given position
-func isCollidingBrickPlayer(pos firefly.Point, brick *Brick) bool {
+// Check if the player at the given position collides with any brick.
+func isCollidingBricksPlayer(pos firefly.Point) bool {
 	b := BBox{
 		Point: pos,
 		Size:  firefly.Size{W: playerD, H: playerD},
 	}
-	return b.Collides(brick.bbox())
+	return level.collides(b)
 }
 
 func pickPlayerColor(i int) firefly.Color {

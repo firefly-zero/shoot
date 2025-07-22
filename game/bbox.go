@@ -8,7 +8,7 @@ type BBox struct {
 	firefly.Size
 }
 
-func (b BBox) Collides(c BBox) bool {
+func (b BBox) collides(c BBox) bool {
 	if b.X+b.W <= c.X {
 		return false
 	}
@@ -28,8 +28,8 @@ func (b BBox) Collides(c BBox) bool {
 //
 // Assume self to be the new position of a movable actor
 // and the argument to be an immovable object.
-func (b BBox) Collide(oldPos firefly.Point, c BBox) firefly.Point {
-	if !b.Collides(c) {
+func (b BBox) collide(oldPos firefly.Point, c BBox) firefly.Point {
+	if !b.collides(c) {
 		return b.Point
 	}
 

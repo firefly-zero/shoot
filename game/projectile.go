@@ -80,7 +80,7 @@ func (p Projectile) isCollidingBrick(brick *Brick) bool {
 		Point: p.pos,
 		Size:  firefly.Size{W: p.d, H: p.d},
 	}
-	return b.Collides(brick.bbox())
+	return b.collides(brick.bbox())
 }
 
 func (p Projectile) isCollidingPlayer(player *Player) bool {

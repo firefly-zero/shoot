@@ -26,6 +26,22 @@ func loadLevel() *Level {
 	return &Level{bricks: bricks}
 }
 
+// Check if the given bounding box collides with any static object.
+func (l Level) collides(b BBox) bool {
+	bricks := l.bricks.iter()
+	for {
+		brick := bricks.next()
+		if brick == nil {
+			break
+		}
+		if b.collides(brick.bbox()) {
+			return true
+		}
+	}
+	return false
+
+}
+
 func (l Level) render() {
 	bricks := l.bricks.iter()
 	for {
