@@ -98,6 +98,9 @@ func (p *Player) handleButtons(btns firefly.Buttons) {
 			d:   bulletD,
 			dmg: 1,
 		}
+		if hub {
+			bullet.dmg = 0
+		}
 		if justPressed.S {
 			bullet.dy = bulletSpeed
 			origin.Y += playerR + bulletD/2
