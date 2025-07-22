@@ -11,7 +11,7 @@ func (es *Enemies) update() {
 	if es.nextWave == 0 {
 		es.nextWave = 60
 		es.items.add(&Enemy{
-			pos:    firefly.Point{X: 10, Y: 10},
+			pos:    firefly.Point{X: -10, Y: -10},
 			d:      8,
 			health: 1,
 		})

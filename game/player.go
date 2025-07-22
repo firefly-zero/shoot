@@ -199,19 +199,11 @@ func isCollidingBricksPlayer(pos firefly.Point) bool {
 
 // Check if the given brick collides with the player at the given position
 func isCollidingBrickPlayer(pos firefly.Point, brick *Brick) bool {
-	if pos.X+playerD <= brick.left() {
-		return false
+	b := BBox{
+		Point: pos,
+		Size:  firefly.Size{W: playerD, H: playerD},
 	}
-	if pos.X >= brick.right() {
-		return false
-	}
-	if pos.Y+playerD <= brick.top() {
-		return false
-	}
-	if pos.Y >= brick.bottom() {
-		return false
-	}
-	return true
+	return b.Collides(brick.bbox())
 }
 
 func pickPlayerColor(i int) firefly.Color {

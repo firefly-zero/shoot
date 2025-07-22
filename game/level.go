@@ -18,7 +18,7 @@ func loadLevel() *Level {
 			y += brickSize.H
 		case '.', ' ':
 			x += brickSize.W
-		case '#':
+		case '#', 'x', 'X':
 			bricks.add(newBrick(x, y))
 			x += brickSize.W
 		}

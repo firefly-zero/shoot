@@ -76,19 +76,11 @@ func (p Projectile) render() {
 }
 
 func (p Projectile) isCollidingBrick(brick *Brick) bool {
-	if p.pos.X+p.d <= brick.left() {
-		return false
+	b := BBox{
+		Point: p.pos,
+		Size:  firefly.Size{W: p.d, H: p.d},
 	}
-	if p.pos.X >= brick.right() {
-		return false
-	}
-	if p.pos.Y+p.d <= brick.top() {
-		return false
-	}
-	if p.pos.Y >= brick.bottom() {
-		return false
-	}
-	return true
+	return b.Collides(brick.bbox())
 }
 
 func (p Projectile) isCollidingPlayer(player *Player) bool {
