@@ -14,26 +14,7 @@ func (es *Enemies) update() {
 	}
 	if es.nextWave == 0 {
 		es.nextWave = 60
-		var pos firefly.Point
-		switch firefly.GetRandom() % 4 {
-		case 0:
-			pos = firefly.Point{X: -10, Y: -10}
-		case 1:
-			pos = firefly.Point{X: firefly.Width + 10, Y: -10}
-		case 2:
-			pos = firefly.Point{X: 10, Y: firefly.Height + 10}
-		default:
-			pos = firefly.Point{X: firefly.Width + 10, Y: firefly.Height + 10}
-		}
-		if es.items.len() < 5 {
-			es.items.add(&Enemy{
-				id:     es.nextID,
-				pos:    pos,
-				d:      8,
-				health: 1,
-			})
-			es.nextID += 1
-		}
+		es.spawnEnemy()
 	} else {
 		es.nextWave -= 1
 	}
@@ -47,6 +28,29 @@ func (es *Enemies) update() {
 		if !keep {
 			items.remove()
 		}
+	}
+}
+
+func (es *Enemies) spawnEnemy() {
+	var pos firefly.Point
+	switch firefly.GetRandom() % 4 {
+	case 0:
+		pos = firefly.Point{X: -10, Y: -10}
+	case 1:
+		pos = firefly.Point{X: firefly.Width + 10, Y: -10}
+	case 2:
+		pos = firefly.Point{X: 10, Y: firefly.Height + 10}
+	default:
+		pos = firefly.Point{X: firefly.Width + 10, Y: firefly.Height + 10}
+	}
+	if es.items.len() < 5 {
+		es.items.add(&Enemy{
+			id:     es.nextID,
+			pos:    pos,
+			d:      8,
+			health: 1,
+		})
+		es.nextID += 1
 	}
 }
 
