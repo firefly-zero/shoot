@@ -8,7 +8,9 @@ type Level struct {
 
 func loadLevel() *Level {
 	bricks := newSet[Brick]()
-	file := firefly.LoadFile("lvl1", nil)
+	lvl := firefly.GetRandom() % 6
+	fileName := "lvl" + string(rune('1'+lvl))
+	file := firefly.LoadFile(fileName, nil)
 	x := 0
 	y := 0
 	for _, c := range file.Raw {
