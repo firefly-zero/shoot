@@ -3,13 +3,21 @@ package game
 import "github.com/firefly-zero/firefly-go/firefly"
 
 type Level struct {
-	bricks *Set[Brick]
+	bricks  *Set[Brick]
+	letters *Set[Letter]
 }
 
 func loadLevel() *Level {
 	bricks := newSet[Brick]()
-	lvl := firefly.GetRandom() % 6
-	fileName := "lvl" + string(rune('1'+lvl))
+	letters := newSet[Letter]()
+	var fileName string
+	if hub {
+		playersCount := firefly.GetPeers().Len()
+		fileName = "hub" + string(rune('0'+playersCount))
+	} else {
+		lvl := firefly.GetRandom() % 6
+		fileName = "lvl" + string(rune('1'+lvl))
+	}
 	file := firefly.LoadFile(fileName, nil)
 	x := 0
 	y := 0
@@ -23,9 +31,12 @@ func loadLevel() *Level {
 		case '#', 'x', 'X':
 			bricks.add(newBrick(x, y))
 			x += brickSize.W
+		default:
+			letters.add(newLetter(c, x, y))
+			x += brickSize.W
 		}
 	}
-	return &Level{bricks: bricks}
+	return &Level{bricks: bricks, letters: letters}
 }
 
 // Check if the given bounding box collides with any static object.
@@ -64,5 +75,13 @@ func (l Level) render() {
 			break
 		}
 		brick.render()
+	}
+	letters := l.letters.iter()
+	for {
+		letter := letters.next()
+		if letter == nil {
+			break
+		}
+		letter.render()
 	}
 }

@@ -4,6 +4,9 @@ author_name = "Lux"
 app_name = "Shoot!"
 
 [files]
+font = { path = "font.fff", url = "https://fonts.fireflyzero.com/fonts/ascii/ibm437r_8x8.fff" }
+hub1 = { path = "levels/hub1.txt", copy = true }
+hub2 = { path = "levels/hub2.txt", copy = true }
 lvl1 = { path = "levels/1.txt", copy = true }
 lvl2 = { path = "levels/2.txt", copy = true }
 lvl3 = { path = "levels/3.txt", copy = true }

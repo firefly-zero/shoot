@@ -32,6 +32,10 @@ func (s *Set[T]) iter() *SetIter[T] {
 	return &SetIter[T]{items: s.items}
 }
 
+func (s *Set[T]) empty() bool {
+	return s.iter().next() == nil
+}
+
 type SetIter[T any] struct {
 	items []*T
 	i     int

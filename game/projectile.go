@@ -48,7 +48,7 @@ func (p *Projectile) update() bool {
 		if bbox.collides(player.bbox()) {
 			player.health -= p.dmg
 			if player.health <= 0 {
-				players.remove()
+				dropDeadPlayers()
 			}
 			return false
 		}

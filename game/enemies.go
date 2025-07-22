@@ -9,6 +9,9 @@ type Enemies struct {
 }
 
 func (es *Enemies) update() {
+	if hub {
+		return
+	}
 	if es.nextWave == 0 {
 		es.nextWave = 60
 		if es.items.len() < 5 {

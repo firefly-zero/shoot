@@ -3,6 +3,8 @@ package game
 import "github.com/firefly-zero/firefly-go/firefly"
 
 var (
+	font        firefly.Font
+	hub         bool
 	projectiles *Projectiles
 	enemies     *Enemies
 	players     *Set[Player]
@@ -10,14 +12,8 @@ var (
 )
 
 func Boot() {
-	projectiles = &Projectiles{items: newSet[Projectile]()}
-	enemies = &Enemies{
-		items:    newSet[Enemy](),
-		nextID:   1,
-		nextWave: 120,
-	}
-	level = loadLevel()
-	players = loadPlayers()
+	font = firefly.LoadFile("font", nil).Font()
+	resetGame()
 }
 
 func Update() {
@@ -46,4 +42,20 @@ func Render() {
 		}
 		p.render()
 	}
+}
+
+func openHub() {
+	hub = true
+	resetGame()
+}
+
+func resetGame() {
+	projectiles = &Projectiles{items: newSet[Projectile]()}
+	enemies = &Enemies{
+		items:    newSet[Enemy](),
+		nextID:   1,
+		nextWave: 120,
+	}
+	level = loadLevel()
+	players = loadPlayers()
 }

@@ -16,15 +16,18 @@ const (
 
 // Remove players with zero health.
 func dropDeadPlayers() {
-	players := players.iter()
+	playersIter := players.iter()
 	for {
-		player := players.next()
+		player := playersIter.next()
 		if player == nil {
 			break
 		}
 		if player.health <= 0 {
-			players.remove()
+			playersIter.remove()
 		}
+	}
+	if players.empty() {
+		openHub()
 	}
 }
 
@@ -62,6 +65,29 @@ func (p *Player) update() {
 	btns := firefly.ReadButtons(p.peer)
 	pad, touched := firefly.ReadPad(p.peer)
 
+	p.handleButtons(btns)
+	p.btns = btns
+
+	if touched {
+		if p.pad != nil {
+			dx := (pad.X - p.pad.X) / 20
+			dx = clamp(dx, -10, 10)
+			dy := (pad.Y - p.pad.Y) / 20
+			dy = clamp(dy, -10, 10)
+
+			newX := clamp(p.pos.X+dx, 0, firefly.Width-playerD)
+			newY := clamp(p.pos.Y-dy, 0, firefly.Height-playerD)
+
+			newPos := firefly.Point{X: newX, Y: newY}
+			p.pos = collideBricksPlayer(p.pos, newPos)
+		}
+		p.pad = &pad
+	} else {
+		p.pad = nil
+	}
+}
+
+func (p *Player) handleButtons(btns firefly.Buttons) {
 	justPressed := btns.JustPressed(p.btns)
 	if justPressed.AnyPressed() {
 		origin := firefly.Point{
@@ -89,25 +115,6 @@ func (p *Player) update() {
 		bullet.origin = origin
 		bullet.pos = origin
 		projectiles.items.add(bullet)
-	}
-	p.btns = btns
-
-	if touched {
-		if p.pad != nil {
-			dx := (pad.X - p.pad.X) / 20
-			dx = clamp(dx, -10, 10)
-			dy := (pad.Y - p.pad.Y) / 20
-			dy = clamp(dy, -10, 10)
-
-			newX := clamp(p.pos.X+dx, 0, firefly.Width-playerD)
-			newY := clamp(p.pos.Y-dy, 0, firefly.Height-playerD)
-
-			newPos := firefly.Point{X: newX, Y: newY}
-			p.pos = collideBricksPlayer(p.pos, newPos)
-		}
-		p.pad = &pad
-	} else {
-		p.pad = nil
 	}
 }
 
