@@ -78,8 +78,22 @@ func (p *Player) update() {
 			newX := clamp(p.pos.X+dx, 0, firefly.Width-playerD)
 			newY := clamp(p.pos.Y-dy, 0, firefly.Height-playerD)
 
-			newPos := firefly.Point{X: newX, Y: newY}
-			p.pos = collideBricksPlayer(p.pos, newPos)
+			b := BBox{
+				Point: firefly.Point{X: newX, Y: newY},
+				Size:  firefly.Size{W: playerD, H: playerD},
+			}
+			b.Point = level.collide(p.pos, b)
+			letters := level.letters.iter()
+			for {
+				letter := letters.next()
+				if letter == nil {
+					break
+				}
+				if b.collides(letter.bbox()) {
+					letter.active = true
+				}
+			}
+			p.pos = b.Point
 		}
 		p.pad = &pad
 	} else {
@@ -153,15 +167,6 @@ func placePlayer(quadrant int) firefly.Point {
 			return p
 		}
 	}
-}
-
-// Make sure that the new player position doesn't place the player inside a brick.
-func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
-	b := BBox{
-		Point: newPos,
-		Size:  firefly.Size{W: playerD, H: playerD},
-	}
-	return level.collide(oldPos, b)
 }
 
 // Check if the player at the given position collides with any brick.
