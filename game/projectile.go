@@ -22,13 +22,15 @@ func (p *Projectile) update() bool {
 	if !p.inBounds() {
 		return false
 	}
+	bbox := p.bbox()
+
 	bricks := level.bricks.iter()
 	for {
 		brick := bricks.next()
 		if brick == nil {
 			break
 		}
-		if p.isCollidingBrick(brick) {
+		if bbox.collides(brick.bbox()) {
 			brick.health -= p.dmg
 			if brick.health <= 0 {
 				bricks.remove()
@@ -51,6 +53,22 @@ func (p *Projectile) update() bool {
 			return false
 		}
 	}
+
+	enemies := enemies.items.iter()
+	for {
+		enemy := enemies.next()
+		if enemy == nil {
+			break
+		}
+		if bbox.collides(enemy.bbox()) {
+			enemy.health -= p.dmg
+			if enemy.health <= 0 {
+				enemies.remove()
+			}
+			return false
+		}
+	}
+
 	return true
 }
 
@@ -70,17 +88,16 @@ func (p Projectile) inBounds() bool {
 	return true
 }
 
-func (p Projectile) render() {
-	s := firefly.Style{FillColor: firefly.ColorRed}
-	firefly.DrawCircle(p.pos, p.d, s)
-}
-
-func (p Projectile) isCollidingBrick(brick *Brick) bool {
-	b := BBox{
+func (p Projectile) bbox() BBox {
+	return BBox{
 		Point: p.pos,
 		Size:  firefly.Size{W: p.d, H: p.d},
 	}
-	return b.collides(brick.bbox())
+}
+
+func (p Projectile) render() {
+	s := firefly.Style{FillColor: firefly.ColorYellow}
+	firefly.DrawCircle(p.pos, p.d, s)
 }
 
 func (p Projectile) isCollidingPlayer(player *Player) bool {

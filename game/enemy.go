@@ -18,10 +18,10 @@ func (e Enemy) bbox() BBox {
 
 func (e *Enemy) update() bool {
 	player := e.pickPlayer()
-	dx := (player.pos.X + playerR - e.pos.X) / 10
-	dy := (player.pos.Y + playerR - e.pos.Y) / 10
-	dx = clamp(dx, -2, 2)
-	dy = clamp(dy, -2, 2)
+	dx := (player.pos.X + playerR - e.d/2 - e.pos.X)
+	dy := (player.pos.Y + playerR - e.d/2 - e.pos.Y)
+	dx = clamp(dx, -1, 1)
+	dy = clamp(dy, -1, 1)
 	if dx == 0 && dy == 0 {
 		return false
 	}
