@@ -39,7 +39,19 @@ func (l Level) collides(b BBox) bool {
 		}
 	}
 	return false
+}
 
+// Collide the given bounding box with static objects on the level.
+func (l Level) collide(oldPos firefly.Point, b BBox) firefly.Point {
+	bricks := l.bricks.iter()
+	for {
+		brick := bricks.next()
+		if brick == nil {
+			break
+		}
+		b.Point = b.collide(oldPos, brick.bbox())
+	}
+	return b.Point
 }
 
 func (l Level) render() {

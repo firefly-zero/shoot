@@ -130,15 +130,7 @@ func collideBricksPlayer(oldPos, newPos firefly.Point) firefly.Point {
 		Point: newPos,
 		Size:  firefly.Size{W: playerD, H: playerD},
 	}
-	bricks := level.bricks.iter()
-	for {
-		brick := bricks.next()
-		if brick == nil {
-			break
-		}
-		b.Point = b.collide(oldPos, brick.bbox())
-	}
-	return b.Point
+	return level.collide(oldPos, b)
 }
 
 // Check if the player at the given position collides with any brick.

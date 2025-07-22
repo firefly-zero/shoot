@@ -29,16 +29,7 @@ func (e *Enemy) update() bool {
 			H: e.d,
 		},
 	}
-	bricks := level.bricks.iter()
-	for {
-		brick := bricks.next()
-		if brick == nil {
-			break
-		}
-		bbox.Point = bbox.collide(e.pos, brick.bbox())
-	}
-
-	e.pos = bbox.Point
+	e.pos = level.collide(e.pos, bbox)
 	return true
 }
 
