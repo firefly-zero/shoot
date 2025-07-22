@@ -45,7 +45,7 @@ func (p *Projectile) update() bool {
 		if player == nil {
 			break
 		}
-		if p.isCollidingPlayer(player) {
+		if bbox.collides(player.bbox()) {
 			player.health -= p.dmg
 			if player.health <= 0 {
 				players.remove()
@@ -98,20 +98,4 @@ func (p Projectile) bbox() BBox {
 func (p Projectile) render() {
 	s := firefly.Style{FillColor: firefly.ColorYellow}
 	firefly.DrawCircle(p.pos, p.d, s)
-}
-
-func (p Projectile) isCollidingPlayer(player *Player) bool {
-	if p.pos.X+p.d <= player.pos.X {
-		return false
-	}
-	if p.pos.X >= player.pos.X+playerD {
-		return false
-	}
-	if p.pos.Y+p.d <= player.pos.Y {
-		return false
-	}
-	if p.pos.Y >= player.pos.Y+playerD {
-		return false
-	}
-	return true
 }

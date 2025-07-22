@@ -14,6 +14,20 @@ const (
 	maxHealth   = 4
 )
 
+// Remove players with zero health.
+func dropDeadPlayers() {
+	players := players.iter()
+	for {
+		player := players.next()
+		if player == nil {
+			break
+		}
+		if player.health <= 0 {
+			players.remove()
+		}
+	}
+}
+
 type Player struct {
 	peer   firefly.Peer
 	pad    *firefly.Pad
@@ -35,6 +49,13 @@ func loadPlayers() *Set[Player] {
 		})
 	}
 	return players
+}
+
+func (p Player) bbox() BBox {
+	return BBox{
+		Point: p.pos,
+		Size:  firefly.Size{W: playerD, H: playerD},
+	}
 }
 
 func (p *Player) update() {

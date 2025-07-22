@@ -18,6 +18,10 @@ func (e Enemy) bbox() BBox {
 
 func (e *Enemy) update() bool {
 	player := e.pickPlayer()
+	if player == nil {
+		return false
+	}
+
 	dx := (player.pos.X + playerR - e.d/2 - e.pos.X)
 	dy := (player.pos.Y + playerR - e.d/2 - e.pos.Y)
 	dx = clamp(dx, -1, 1)
@@ -26,7 +30,7 @@ func (e *Enemy) update() bool {
 		return false
 	}
 
-	// Collide the new coordinates with bricks.
+	// Collide the new coordinates.
 	bbox := BBox{
 		Point: firefly.Point{X: e.pos.X + dx, Y: e.pos.Y + dy},
 		Size:  firefly.Size{W: e.d, H: e.d},
@@ -43,6 +47,15 @@ func (e *Enemy) update() bool {
 		}
 		bbox.Point = bbox.collide(e.pos, enemy.bbox())
 	}
+
+	if bbox.collides(player.bbox()) {
+		player.health -= 1
+		if player.health <= 0 {
+			dropDeadPlayers()
+		}
+		return false
+	}
+
 	e.pos = bbox.Point
 	return true
 }
