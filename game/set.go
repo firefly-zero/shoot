@@ -18,6 +18,16 @@ func (s *Set[T]) add(v *T) {
 	s.items = append(s.items, v)
 }
 
+func (s *Set[T]) len() int {
+	res := 0
+	for _, x := range s.items {
+		if x != nil {
+			res++
+		}
+	}
+	return res
+}
+
 func (s *Set[T]) iter() *SetIter[T] {
 	return &SetIter[T]{items: s.items}
 }

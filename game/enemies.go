@@ -11,13 +11,15 @@ type Enemies struct {
 func (es *Enemies) update() {
 	if es.nextWave == 0 {
 		es.nextWave = 60
-		es.items.add(&Enemy{
-			id:     es.nextID,
-			pos:    firefly.Point{X: -10, Y: -10},
-			d:      8,
-			health: 1,
-		})
-		es.nextID += 1
+		if es.items.len() < 5 {
+			es.items.add(&Enemy{
+				id:     es.nextID,
+				pos:    firefly.Point{X: -10, Y: -10},
+				d:      8,
+				health: 1,
+			})
+			es.nextID += 1
+		}
 	} else {
 		es.nextWave -= 1
 	}
