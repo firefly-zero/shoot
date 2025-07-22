@@ -7,6 +7,7 @@ type Enemy struct {
 	pos    firefly.Point
 	d      int
 	health int
+	stuck  int
 }
 
 func (e Enemy) bbox() BBox {
@@ -35,6 +36,26 @@ func (e *Enemy) update() bool {
 		Point: firefly.Point{X: e.pos.X + dx, Y: e.pos.Y + dy},
 		Size:  firefly.Size{W: e.d, H: e.d},
 	}
+
+	// If the enemy is stuck on a brick for too long,
+	// explode the enemy, damaging the brick.
+	if e.stuck > 30 {
+		bricks := level.bricks.iter()
+		for {
+			brick := bricks.next()
+			if brick == nil {
+				break
+			}
+			if bbox.collides(brick.bbox()) {
+				brick.health -= 1
+				if brick.health <= 0 {
+					bricks.remove()
+				}
+				return false
+			}
+		}
+	}
+
 	bbox.Point = level.collide(e.pos, bbox)
 	enemies := enemies.items.iter()
 	for {
@@ -56,6 +77,11 @@ func (e *Enemy) update() bool {
 		return false
 	}
 
+	if e.pos == bbox.Point {
+		e.stuck++
+	} else {
+		e.stuck = 0
+	}
 	e.pos = bbox.Point
 	return true
 }
