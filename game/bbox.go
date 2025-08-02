@@ -32,7 +32,10 @@ func (b BBox) collide(oldPos firefly.Point, c BBox) firefly.Point {
 	if !b.collides(c) {
 		return b.Point
 	}
+	return b.collideSides(oldPos, c)
+}
 
+func (b BBox) collideSides(oldPos firefly.Point, c BBox) firefly.Point {
 	// A simple solution for a collision is to return oldPos.
 	// However, it makes the bricks sticky. To make it easier to slide
 	// alongs the brick edges, we need to project the new position
