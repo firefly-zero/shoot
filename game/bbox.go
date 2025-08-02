@@ -42,28 +42,28 @@ func (b BBox) collide(oldPos firefly.Point, c BBox) firefly.Point {
 	// every brick surface explicitly but I'm not smart enough for this.
 
 	// left surface
-	right := firefly.Point{X: b.X + b.W, Y: oldPos.Y + b.H/2}
+	right := firefly.P(b.X+b.W, oldPos.Y+b.H/2)
 	if right.X < c.X+c.W && right.Y >= c.Y && right.Y <= c.Y+c.H {
 		b.X = c.X - b.W
 		return b.Point
 	}
 
 	// right surface
-	left := firefly.Point{X: oldPos.X, Y: oldPos.Y + b.H/2}
+	left := firefly.P(oldPos.X, oldPos.Y+b.H/2)
 	if left.X > c.X && left.Y >= c.Y && left.Y <= c.Y+c.H {
 		b.X = c.X + c.W
 		return b.Point
 	}
 
 	// top surface
-	bottom := firefly.Point{X: oldPos.X + b.W/2, Y: oldPos.Y + b.H}
+	bottom := firefly.P(oldPos.X+b.W/2, oldPos.Y+b.H)
 	if bottom.Y > c.Y+c.H && bottom.X <= c.X && bottom.X >= c.X+c.W {
 		b.Y = c.Y - b.H
 		return b.Point
 	}
 
 	// bottom surface
-	top := firefly.Point{X: oldPos.X + b.W/2, Y: oldPos.Y + b.H}
+	top := firefly.P(oldPos.X+b.W/2, oldPos.Y+b.H)
 	if top.Y > c.Y && top.X <= c.X && top.X >= c.X+c.W {
 		b.Y = c.Y + c.H
 		return b.Point
