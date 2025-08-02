@@ -13,7 +13,7 @@ var (
 
 func Boot() {
 	font = firefly.LoadFile("font", nil).Font()
-	resetGame()
+	openHub()
 }
 
 func Update() {
