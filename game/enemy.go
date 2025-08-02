@@ -56,6 +56,7 @@ func (e *Enemy) update() bool {
 		}
 	}
 
+	// Collide the enemy with other enemies.
 	bbox.Point = level.collide(e.pos, bbox)
 	enemies := enemies.items.iter()
 	for {
@@ -69,6 +70,7 @@ func (e *Enemy) update() bool {
 		bbox.Point = bbox.collide(e.pos, enemy.bbox())
 	}
 
+	// If enemy collides with a player, explode.
 	if bbox.collides(player.bbox()) {
 		player.health -= 1
 		if player.health <= 0 {
@@ -77,6 +79,7 @@ func (e *Enemy) update() bool {
 		return false
 	}
 
+	// ITrack for how long the enemy is not moving.
 	if e.pos == bbox.Point {
 		e.stuck++
 	} else {
