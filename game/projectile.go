@@ -64,6 +64,7 @@ func (p *Projectile) update() bool {
 			enemy.health -= p.dmg
 			if enemy.health <= 0 {
 				enemies.remove()
+				score.decrement()
 			}
 			return false
 		}
