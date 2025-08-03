@@ -10,6 +10,7 @@ var (
 	players     *Set[Player]
 	level       *Level
 	score       *Score
+	title       *Title
 )
 
 func Boot() {
@@ -18,6 +19,10 @@ func Boot() {
 }
 
 func Update() {
+	if title != nil {
+		title.update()
+		return
+	}
 	projectiles.update()
 	enemies.update()
 	iter := players.iter()
@@ -32,6 +37,10 @@ func Update() {
 
 func Render() {
 	firefly.ClearScreen(firefly.ColorWhite)
+	if title != nil {
+		title.render()
+		return
+	}
 	level.render()
 	score.render()
 	projectiles.render()
@@ -52,6 +61,7 @@ func openHub() {
 }
 
 func resetGame() {
+	title = nil
 	score = newScore()
 	projectiles = &Projectiles{items: newSet[Projectile]()}
 	enemies = newEnemies()

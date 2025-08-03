@@ -29,11 +29,25 @@ func dropDeadPlayers() {
 		}
 	}
 	if players.empty() {
-		openHub()
-	}
-	if changed {
+		setTitle("everyone is dead")
+	} else if changed {
 		score.decreaseTo(5 * players.len())
 	}
+}
+
+func iAmAlive() bool {
+	me := firefly.GetMe()
+	playersIter := players.iter()
+	for {
+		player := playersIter.next()
+		if player == nil {
+			break
+		}
+		if player.peer == me {
+			return true
+		}
+	}
+	return false
 }
 
 type Player struct {

@@ -18,7 +18,11 @@ func newScore() *Score {
 func (s *Score) decrement() {
 	s.val--
 	if s.val == 0 {
-		openHub()
+		if iAmAlive() {
+			setTitle("victory!")
+		} else {
+			setTitle("victory but without you")
+		}
 	}
 }
 
