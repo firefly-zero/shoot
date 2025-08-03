@@ -17,17 +17,22 @@ const (
 // Remove players with zero health.
 func dropDeadPlayers() {
 	playersIter := players.iter()
+	changed := false
 	for {
 		player := playersIter.next()
 		if player == nil {
 			break
 		}
 		if player.health <= 0 {
+			changed = true
 			playersIter.remove()
 		}
 	}
 	if players.empty() {
 		openHub()
+	}
+	if changed {
+		score.decreaseTo(5 * players.len())
 	}
 }
 
