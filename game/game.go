@@ -51,11 +51,7 @@ func openHub() {
 
 func resetGame() {
 	projectiles = &Projectiles{items: newSet[Projectile]()}
-	enemies = &Enemies{
-		items:    newSet[Enemy](),
-		nextID:   1,
-		nextWave: 120,
-	}
+	enemies = newEnemies()
 	level = loadLevel()
 	players = loadPlayers()
 }

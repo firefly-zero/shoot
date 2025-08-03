@@ -6,6 +6,16 @@ type Enemies struct {
 	nextID   int
 	items    *Set[Enemy]
 	nextWave int
+	waves    int
+}
+
+func newEnemies() *Enemies {
+	return &Enemies{
+		items:    newSet[Enemy](),
+		nextID:   1,
+		nextWave: 120,
+		waves:    0,
+	}
 }
 
 func (es *Enemies) update() {
@@ -13,7 +23,8 @@ func (es *Enemies) update() {
 		return
 	}
 	if es.nextWave == 0 {
-		es.nextWave = 60
+		es.nextWave = max(120-es.waves*4, 30)
+		es.waves++
 		es.spawnEnemy()
 	} else {
 		es.nextWave -= 1
