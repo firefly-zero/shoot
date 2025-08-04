@@ -5,25 +5,21 @@ type Projectiles struct {
 }
 
 func (ps *Projectiles) update() {
-	items := ps.items.iter()
-	for {
-		p := items.next()
+	for i, p := range ps.items.iter() {
 		if p == nil {
-			break
+			continue
 		}
 		keep := p.update()
 		if !keep {
-			items.remove()
+			ps.items.remove(i)
 		}
 	}
 }
 
 func (ps Projectiles) render() {
-	items := ps.items.iter()
-	for {
-		p := items.next()
+	for _, p := range ps.items.iter() {
 		if p == nil {
-			break
+			continue
 		}
 		p.render()
 	}

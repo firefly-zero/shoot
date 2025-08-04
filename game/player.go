@@ -16,16 +16,14 @@ const (
 
 // Remove players with zero health.
 func dropDeadPlayers() {
-	playersIter := players.iter()
 	changed := false
-	for {
-		player := playersIter.next()
+	for i, player := range players.iter() {
 		if player == nil {
-			break
+			continue
 		}
 		if player.health <= 0 {
 			changed = true
-			playersIter.remove()
+			players.remove(i)
 		}
 	}
 	if players.empty() {
@@ -37,11 +35,9 @@ func dropDeadPlayers() {
 
 func iAmAlive() bool {
 	me := firefly.GetMe()
-	playersIter := players.iter()
-	for {
-		player := playersIter.next()
+	for _, player := range players.iter() {
 		if player == nil {
-			break
+			continue
 		}
 		if player.peer == me {
 			return true
@@ -102,11 +98,9 @@ func (p *Player) update() {
 				Size:  firefly.Size{W: playerD, H: playerD},
 			}
 			b.Point = level.collide(p.pos, b)
-			letters := level.letters.iter()
-			for {
-				letter := letters.next()
+			for _, letter := range level.letters.iter() {
 				if letter == nil {
-					break
+					continue
 				}
 				if b.collides(letter.bbox()) {
 					letter.active = true

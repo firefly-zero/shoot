@@ -18,6 +18,10 @@ func (s *Set[T]) add(v *T) {
 	s.items = append(s.items, v)
 }
 
+func (s *Set[T]) remove(i int) {
+	s.items[i] = nil
+}
+
 func (s *Set[T]) len() int {
 	res := 0
 	for _, x := range s.items {
@@ -28,30 +32,15 @@ func (s *Set[T]) len() int {
 	return res
 }
 
-func (s *Set[T]) iter() *SetIter[T] {
-	return &SetIter[T]{items: s.items}
+func (s *Set[T]) iter() []*T {
+	return s.items
 }
 
 func (s *Set[T]) empty() bool {
-	return s.iter().next() == nil
-}
-
-type SetIter[T any] struct {
-	items []*T
-	i     int
-}
-
-func (s *SetIter[T]) remove() {
-	s.items[s.i-1] = nil
-}
-
-func (s *SetIter[T]) next() *T {
-	for s.i < len(s.items) {
-		v := s.items[s.i]
-		s.i++
-		if v != nil {
-			return v
+	for _, x := range s.items {
+		if x != nil {
+			return false
 		}
 	}
-	return nil
+	return true
 }

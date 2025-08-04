@@ -24,26 +24,22 @@ func (p *Projectile) update() bool {
 	}
 	bbox := p.bbox()
 
-	bricks := level.bricks.iter()
-	for {
-		brick := bricks.next()
+	for i, brick := range level.bricks.iter() {
 		if brick == nil {
-			break
+			continue
 		}
 		if bbox.collides(brick.bbox()) {
 			brick.health -= p.dmg
 			if brick.health <= 0 {
-				bricks.remove()
+				level.bricks.remove(i)
 			}
 			return false
 		}
 	}
 
-	players := players.iter()
-	for {
-		player := players.next()
+	for _, player := range players.iter() {
 		if player == nil {
-			break
+			continue
 		}
 		if bbox.collides(player.bbox()) {
 			player.health -= p.dmg
@@ -54,16 +50,14 @@ func (p *Projectile) update() bool {
 		}
 	}
 
-	enemies := enemies.items.iter()
-	for {
-		enemy := enemies.next()
+	for i, enemy := range enemies.items.iter() {
 		if enemy == nil {
-			break
+			continue
 		}
 		if bbox.collides(enemy.bbox()) {
 			enemy.health -= p.dmg
 			if enemy.health <= 0 {
-				enemies.remove()
+				enemies.items.remove(i)
 				score.decrement()
 			}
 			return false

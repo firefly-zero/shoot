@@ -25,13 +25,11 @@ func Update() {
 	}
 	projectiles.update()
 	enemies.update()
-	iter := players.iter()
-	for {
-		p := iter.next()
-		if p == nil {
-			break
+	for _, player := range players.iter() {
+		if player == nil {
+			continue
 		}
-		p.update()
+		player.update()
 	}
 }
 
@@ -45,13 +43,11 @@ func Render() {
 	score.render()
 	projectiles.render()
 	enemies.render()
-	iter := players.iter()
-	for {
-		p := iter.next()
-		if p == nil {
-			break
+	for _, player := range players.iter() {
+		if player == nil {
+			continue
 		}
-		p.render()
+		player.render()
 	}
 }
 

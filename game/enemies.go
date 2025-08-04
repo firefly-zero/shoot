@@ -29,15 +29,13 @@ func (es *Enemies) update() {
 	} else {
 		es.nextWave -= 1
 	}
-	items := es.items.iter()
-	for {
-		p := items.next()
-		if p == nil {
-			break
+	for i, enemy := range es.items.iter() {
+		if enemy == nil {
+			continue
 		}
-		keep := p.update()
+		keep := enemy.update()
 		if !keep {
-			items.remove()
+			es.items.remove(i)
 		}
 	}
 }
@@ -66,12 +64,10 @@ func (es *Enemies) spawnEnemy() {
 }
 
 func (es Enemies) render() {
-	items := es.items.iter()
-	for {
-		p := items.next()
-		if p == nil {
-			break
+	for _, enemy := range es.items.iter() {
+		if enemy == nil {
+			continue
 		}
-		p.render()
+		enemy.render()
 	}
 }

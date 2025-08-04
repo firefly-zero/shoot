@@ -7,11 +7,9 @@ func maybeStartGame() {
 	if !hub {
 		return
 	}
-	letters := level.letters.iter()
-	for {
-		letter := letters.next()
+	for _, letter := range level.letters.iter() {
 		if letter == nil {
-			break
+			continue
 		}
 		if !letter.active {
 			return
@@ -59,14 +57,12 @@ func loadLevel() *Level {
 }
 
 // Check if the given bounding box collides with any static object.
-func (l Level) collides(b BBox) bool {
-	bricks := l.bricks.iter()
-	for {
-		brick := bricks.next()
+func (l Level) collides(box BBox) bool {
+	for _, brick := range level.bricks.iter() {
 		if brick == nil {
-			break
+			continue
 		}
-		if b.collides(brick.bbox()) {
+		if box.collides(brick.bbox()) {
 			return true
 		}
 	}
@@ -76,31 +72,25 @@ func (l Level) collides(b BBox) bool {
 // Collide the given bounding box with static objects on the level.
 func (l Level) collide(oldPos firefly.Point, b BBox) firefly.Point {
 	c := BCircle{BBox: b}
-	bricks := l.bricks.iter()
-	for {
-		brick := bricks.next()
+	for _, brick := range level.bricks.iter() {
 		if brick == nil {
-			break
+			continue
 		}
 		c.Point = c.collide(oldPos, brick.bbox())
 	}
 	return c.Point
 }
 
-func (l Level) render() {
-	bricks := l.bricks.iter()
-	for {
-		brick := bricks.next()
+func (Level) render() {
+	for _, brick := range level.bricks.iter() {
 		if brick == nil {
-			break
+			continue
 		}
 		brick.render()
 	}
-	letters := l.letters.iter()
-	for {
-		letter := letters.next()
+	for _, letter := range level.letters.iter() {
 		if letter == nil {
-			break
+			continue
 		}
 		letter.render()
 	}

@@ -40,16 +40,14 @@ func (e *Enemy) update() bool {
 	// If the enemy is stuck on a brick for too long,
 	// explode the enemy, damaging the brick.
 	if e.stuck > 30 {
-		bricks := level.bricks.iter()
-		for {
-			brick := bricks.next()
+		for i, brick := range level.bricks.iter() {
 			if brick == nil {
-				break
+				continue
 			}
 			if bbox.collides(brick.bbox()) {
 				brick.health -= 1
 				if brick.health <= 0 {
-					bricks.remove()
+					level.bricks.remove(i)
 				}
 				return false
 			}
@@ -58,11 +56,9 @@ func (e *Enemy) update() bool {
 
 	// Collide the enemy with other enemies.
 	bbox.Point = level.collide(e.pos, bbox)
-	enemies := enemies.items.iter()
-	for {
-		enemy := enemies.next()
+	for _, enemy := range enemies.items.iter() {
 		if enemy == nil {
-			break
+			continue
 		}
 		if enemy.id == e.id {
 			continue
@@ -90,7 +86,10 @@ func (e *Enemy) update() bool {
 }
 
 func (e Enemy) pickPlayer() *Player {
-	return players.iter().next()
+	for _, p := range players.iter() {
+		return p
+	}
+	return nil
 }
 
 func (e Enemy) render() {
