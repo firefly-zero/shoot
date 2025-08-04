@@ -33,8 +33,8 @@ func (e *Enemy) update() bool {
 
 	// Collide the new coordinates.
 	bbox := BBox{
-		Point: firefly.Point{X: e.pos.X + dx, Y: e.pos.Y + dy},
-		Size:  firefly.Size{W: e.d, H: e.d},
+		Point: firefly.P(e.pos.X+dx, e.pos.Y+dy),
+		Size:  firefly.S(e.d, e.d),
 	}
 
 	// If the enemy is stuck on a brick for too long,

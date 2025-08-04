@@ -23,5 +23,5 @@ func (t *Title) update() {
 
 func (t Title) render() {
 	x := (firefly.Width - font.LineWidth(t.msg)) / 2
-	firefly.DrawText(t.msg, font, firefly.Point{X: x, Y: 80}, firefly.ColorBlack)
+	firefly.DrawText(t.msg, font, firefly.P(x, 80), firefly.ColorBlack)
 }

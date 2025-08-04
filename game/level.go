@@ -57,7 +57,7 @@ func loadLevel() *Level {
 }
 
 // Check if the given bounding box collides with any static object.
-func (l Level) collides(box BBox) bool {
+func (level Level) collides(box BBox) bool {
 	for _, brick := range level.bricks.iter() {
 		if brick == nil {
 			continue
@@ -70,7 +70,7 @@ func (l Level) collides(box BBox) bool {
 }
 
 // Collide the given bounding box with static objects on the level.
-func (l Level) collide(oldPos firefly.Point, b BBox) firefly.Point {
+func (level Level) collide(oldPos firefly.Point, b BBox) firefly.Point {
 	c := BCircle{BBox: b}
 	for _, brick := range level.bricks.iter() {
 		if brick == nil {
@@ -81,7 +81,7 @@ func (l Level) collide(oldPos firefly.Point, b BBox) firefly.Point {
 	return c.Point
 }
 
-func (Level) render() {
+func (level Level) render() {
 	for _, brick := range level.bricks.iter() {
 		if brick == nil {
 			continue

@@ -94,8 +94,8 @@ func (p *Player) update() {
 			newY := clamp(p.pos.Y-dy, 0, firefly.Height-playerD)
 
 			b := BBox{
-				Point: firefly.Point{X: newX, Y: newY},
-				Size:  firefly.Size{W: playerD, H: playerD},
+				Point: firefly.P(newX, newY),
+				Size:  firefly.S(playerD, playerD),
 			}
 			b.Point = level.collide(p.pos, b)
 			for _, letter := range level.letters.iter() {
@@ -118,10 +118,10 @@ func (p *Player) update() {
 func (p *Player) handleButtons(btns firefly.Buttons) {
 	justPressed := btns.JustPressed(p.btns)
 	if justPressed.AnyPressed() {
-		origin := firefly.Point{
-			X: p.pos.X + playerR - bulletD/2,
-			Y: p.pos.Y + playerR - bulletD/2,
-		}
+		origin := firefly.P(
+			p.pos.X+playerR-bulletD/2,
+			p.pos.Y+playerR-bulletD/2,
+		)
 		bullet := &Projectile{
 			d:   bulletD,
 			dmg: 1,
@@ -176,7 +176,7 @@ func placePlayer(quadrant int) firefly.Point {
 		if quadrant == 1 || quadrant == 3 {
 			y += firefly.Height / 2
 		}
-		p := firefly.Point{X: x, Y: y}
+		p := firefly.P(x, y)
 		if !isCollidingBricksPlayer(p) {
 			return p
 		}

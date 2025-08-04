@@ -13,7 +13,7 @@ type Letter struct {
 func newLetter(c byte, x, y int) *Letter {
 	return &Letter{
 		c:   string(rune(c)),
-		pos: firefly.Point{X: x, Y: y},
+		pos: firefly.P(x, y),
 	}
 }
 
@@ -40,9 +40,6 @@ func (b Letter) render() {
 		brickSize,
 		style,
 	)
-	firefly.DrawText(
-		b.c, font,
-		b.pos.Add(firefly.Point{X: 4, Y: 11}),
-		textColor,
-	)
+	p := firefly.P(b.pos.X+4, b.pos.Y+11)
+	font.Draw(b.c, p, textColor)
 }

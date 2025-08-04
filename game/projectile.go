@@ -14,10 +14,10 @@ type Projectile struct {
 
 func (p *Projectile) update() bool {
 	p.age += 1.
-	p.pos = firefly.Point{
-		X: p.origin.X + int(p.age*p.dx),
-		Y: p.origin.Y + int(p.age*p.dy),
-	}
+	p.pos = firefly.P(
+		p.origin.X+int(p.age*p.dx),
+		p.origin.Y+int(p.age*p.dy),
+	)
 
 	if !p.inBounds() {
 		return false
