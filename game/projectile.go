@@ -91,6 +91,6 @@ func (p Projectile) bbox() BBox {
 }
 
 func (p Projectile) render() {
-	s := firefly.Style{FillColor: firefly.ColorYellow}
+	s := firefly.Solid(firefly.ColorYellow)
 	firefly.DrawCircle(p.pos, p.d, s)
 }

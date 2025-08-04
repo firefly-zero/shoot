@@ -93,7 +93,5 @@ func (e Enemy) pickPlayer() *Player {
 }
 
 func (e Enemy) render() {
-	firefly.DrawCircle(e.pos, e.d, firefly.Style{
-		FillColor: firefly.ColorRed,
-	})
+	firefly.DrawCircle(e.pos, e.d, firefly.Solid(firefly.ColorRed))
 }

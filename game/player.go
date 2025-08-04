@@ -152,16 +152,11 @@ func (p *Player) handleButtons(btns firefly.Buttons) {
 func (p *Player) render() {
 	{
 		angle := firefly.Radians(2 * math.Pi * float32(p.health) / maxHealth)
-		s := firefly.Style{
-			FillColor: p.color,
-		}
+		s := firefly.Solid(p.color)
 		firefly.DrawSector(p.pos, playerD, firefly.Radians(0), angle, s)
 	}
 
-	s := firefly.Style{
-		StrokeColor: p.color,
-		StrokeWidth: 1,
-	}
+	s := firefly.Outlined(p.color, 1)
 	firefly.DrawCircle(p.pos, playerD, s)
 }
 
