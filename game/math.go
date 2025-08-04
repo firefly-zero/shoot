@@ -1,19 +1,11 @@
 package game
 
 func clamp[T int](a, aMin, aMax T) T {
-	return min(max(a, aMin), aMax)
-}
-
-func min[T int](a, b T) T {
-	if a < b {
-		return a
+	if a <= aMin {
+		return aMin
 	}
-	return b
-}
-
-func max[T int](a, b T) T {
-	if a > b {
-		return a
+	if a >= aMax {
+		return aMax
 	}
-	return b
+	return a
 }
