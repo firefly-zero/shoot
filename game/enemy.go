@@ -13,7 +13,7 @@ type Enemy struct {
 func (e Enemy) bbox() BBox {
 	return BBox{
 		Point: e.pos,
-		Size:  firefly.Size{W: e.d, H: e.d},
+		Size:  firefly.S(e.d, e.d),
 	}
 }
 

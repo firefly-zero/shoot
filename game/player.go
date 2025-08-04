@@ -72,7 +72,7 @@ func loadPlayers() *Set[Player] {
 func (p Player) bbox() BBox {
 	return BBox{
 		Point: p.pos,
-		Size:  firefly.Size{W: playerD, H: playerD},
+		Size:  firefly.S(playerD, playerD),
 	}
 }
 
@@ -187,7 +187,7 @@ func placePlayer(quadrant int) firefly.Point {
 func isCollidingBricksPlayer(pos firefly.Point) bool {
 	b := BBox{
 		Point: pos,
-		Size:  firefly.Size{W: playerD, H: playerD},
+		Size:  firefly.S(playerD, playerD),
 	}
 	return level.collides(b)
 }

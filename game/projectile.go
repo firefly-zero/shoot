@@ -86,7 +86,7 @@ func (p Projectile) inBounds() bool {
 func (p Projectile) bbox() BBox {
 	return BBox{
 		Point: p.pos,
-		Size:  firefly.Size{W: p.d, H: p.d},
+		Size:  firefly.S(p.d, p.d),
 	}
 }
 

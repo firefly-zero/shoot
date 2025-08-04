@@ -33,7 +33,7 @@ func (b Brick) render() {
 	)
 	firefly.DrawRect(
 		b.pos.Add(firefly.P(2, 2)),
-		brickSize.Sub(firefly.Size{W: 4, H: 4}),
+		brickSize.Sub(firefly.S(4, 4)),
 		firefly.Outlined(firefly.ColorWhite, 1),
 	)
 	b.renderCracks()
