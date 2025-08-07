@@ -86,10 +86,21 @@ func (e *Enemy) update() bool {
 }
 
 func (e Enemy) pickPlayer() *Player {
+	var bestPlayer *Player
+	bestDistance := 0
 	for _, p := range players.iter() {
-		return p
+		if p == nil {
+			continue
+		}
+		xDiff := p.pos.X - e.pos.X
+		yDiff := p.pos.Y - e.pos.Y
+		dist := xDiff*xDiff + yDiff*yDiff
+		if bestPlayer == nil || dist > bestDistance {
+			bestPlayer = p
+			bestDistance = dist
+		}
 	}
-	return nil
+	return bestPlayer
 }
 
 func (e Enemy) render() {
