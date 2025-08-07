@@ -69,7 +69,7 @@ func loadPlayers() *Set[Player] {
 	return players
 }
 
-func (p Player) bbox() BBox {
+func (p *Player) bbox() BBox {
 	return BBox{
 		Point: p.pos,
 		Size:  firefly.S(playerD, playerD),

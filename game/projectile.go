@@ -67,7 +67,7 @@ func (p *Projectile) update() bool {
 	return true
 }
 
-func (p Projectile) inBounds() bool {
+func (p *Projectile) inBounds() bool {
 	if p.pos.X < 0 {
 		return false
 	}
@@ -83,14 +83,14 @@ func (p Projectile) inBounds() bool {
 	return true
 }
 
-func (p Projectile) bbox() BBox {
+func (p *Projectile) bbox() BBox {
 	return BBox{
 		Point: p.pos,
 		Size:  firefly.S(p.d, p.d),
 	}
 }
 
-func (p Projectile) render() {
+func (p *Projectile) render() {
 	s := firefly.Solid(firefly.ColorYellow)
 	firefly.DrawCircle(p.pos, p.d, s)
 }

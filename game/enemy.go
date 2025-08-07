@@ -85,7 +85,7 @@ func (e *Enemy) update() bool {
 	return true
 }
 
-func (e Enemy) pickPlayer() *Player {
+func (e *Enemy) pickPlayer() *Player {
 	var bestPlayer *Player
 	bestDistance := 0
 	for _, p := range players.iter() {
